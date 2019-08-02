@@ -45,6 +45,7 @@ def user(username):
 #   app.run(debug=True)
 
 # we tell the app to use Heroku config vars for IP and PORT, this is set in settings in the Heroku dashboard
- app.run(host=os.environ.get('IP'),
-        port=int(os.environ.get('PORT')),
+# Add IP 0.0.0.0 and PORT 5000 in settings in Heroku dashboard!
+ app.run(host=os.environ.get("IP"),
+        port=int(os.environ.get("PORT")),
         debug=False)
