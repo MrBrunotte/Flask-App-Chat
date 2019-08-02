@@ -1,32 +1,36 @@
 import os                       # import os to have access to the environment variables
 from datetime import datetime
-from flask import Flask, redirect, render_template         # import Flask, redirect and render_template
+# import Flask, redirect and render_template
+from flask import Flask, redirect, render_template, request, session
 
 app = Flask(__name__)           # initialize the new flask app
+app.secret_key = "randomstring123"
 messages = []                   # create an empty list called messages
 
 
 def add_messages(username, message):
     """Add messages to the `messages` list"""
     now = datetime.now().strftime("%H:%M:%S")
-    messages.append("({}) {}: {}".format(now, username, message))
+    messages_dict = {"timestamp": now, "from": username, "message": message}
 
+    messages.append(messages_dict)
 
-def get_all_messages():
-    """Get all of the messages and separate them with a `br`"""
-    return "<br>".join(messages)
-
-
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
     """Main page with instructions"""
+    if request.method == "POST":
+        session["username"] = request.form["username"]
+
+    if "username" in session:
+        return redirect(session["username"])
+
     return render_template("index.html")
 
 
 @app.route("/<username>")
 def user(username):
     """Display chat messages"""
-    return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
+    return "<h1>Welcome, {0}</h1>{1}".format(username, messages)
 
 
 @app.route("/<username>/<message>")
