@@ -7,7 +7,17 @@ app = Flask(__name__)           # initialize the new flask app
 @app.route('/')                 # create the app route decorator.
 # define the function  that is going to bound to our decorator.
 def index():
-    return "<h1>Hello There</h1>"
+    """ Main page instructions """
+    return "To send a message /USERNAME/MESSAGE"
+
+
+@app.route('/<username>')
+def user(username):
+    return "Hi " + username
+
+@app.route('/<username>/<message>')
+def send_message(username, message):
+    return "{0}: {1}".format(username,message)
 
 #app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
 
