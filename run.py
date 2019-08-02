@@ -4,7 +4,7 @@ from flask import Flask, redirect, render_template, request, session, url_for
 
 
 app = Flask(__name__)
-app.secret_key = "randomstring123"
+app.secret_key = os.getenv("SECRET", "randomstring123")
 messages = []
 
 
@@ -39,12 +39,12 @@ def user(username):
                            chat_messages=messages)
 
 
-#app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True)
-if __name__ == '__main__':
+#app.run(host=os.getenv("IP", 0.0.0.0), port=int(os.getenv("PORT", "5000")), debug=False)
+#if __name__ == '__main__':
     # NEVER HAVE DEBUG=TRUE IN PRODUCTION OR WHEN SUBMITTING!!!
-    app.run(debug=True)
+ #   app.run(debug=True)
 
 # we tell the app to use Heroku config vars for IP and PORT, this is set in settings in the Heroku dashboard
-# app.run(host=os.environ.get('IP'),
-#            port=int(os.environ.get('PORT')),
-#            debug=True)
+app.run(host=os.environ.get('IP'),
+           port=int(os.environ.get('PORT')),
+           debug=False)
